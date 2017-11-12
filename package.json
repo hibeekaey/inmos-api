@@ -1,0 +1,32 @@
+{
+  "name": "inmos-api",
+  "version": "1.0.0",
+  "description": "API for the Online Inventory Monitoring System",
+  "engines": {
+    "node": "8.9.1"
+  },
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hibeekaey/inmos-api.git"
+  },
+  "keywords": [
+    "API",
+    "Inventory",
+    "Monitoring",
+    "System"
+  ],
+  "author": "Ibukun O. Dairo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hibeekaey/inmos-api/issues"
+  },
+  "homepage": "https://github.com/hibeekaey/inmos-api#readme"
+}
