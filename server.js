@@ -1,6 +1,9 @@
 const express = require('express')
 const app = express()
 
+// app session
+const session = require('./lib/session')(app)
+
 // require routes
 const routes = require('./routes')
 

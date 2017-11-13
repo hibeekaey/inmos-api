@@ -30,6 +30,9 @@
   },
   "homepage": "https://github.com/hibeekaey/inmos-api#readme",
   "dependencies": {
-    "express": "^4.16.2"
+    "cookie-session": "^2.0.0-beta.3",
+    "cookies": "^0.7.1",
+    "express": "^4.16.2",
+    "pg": "^7.4.0"
   }
 }

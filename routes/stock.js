@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
 
+// user authentication lib
+const auth = require('../lib/auth')
+
 // middleware that is specific to this router
 router.use((req, res, next) => {
   console.log('Accessing stock endpoint')
