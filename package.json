@@ -28,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/hibeekaey/inmos-api/issues"
   },
-  "homepage": "https://github.com/hibeekaey/inmos-api#readme"
+  "homepage": "https://github.com/hibeekaey/inmos-api#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }
