@@ -13,7 +13,8 @@ COMMENT ON DATABASE inmos
 
 CREATE TABLE IF NOT EXISTS stores_table
 (
-
+  store_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  contact JSONB
 );
 
 -- Table: vendors_table
@@ -22,7 +23,8 @@ CREATE TABLE IF NOT EXISTS stores_table
 
 CREATE TABLE IF NOT EXISTS vendors_table
 (
-
+  vendor_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  contact JSONB
 );
 
 -- Table: inventory_table
@@ -31,7 +33,7 @@ CREATE TABLE IF NOT EXISTS vendors_table
 
 CREATE TABLE IF NOT EXISTS inventory_table
 (
-
+  stock_id UUID PRIMARY KEY DEFAULT gen_random_uuid()
 );
 
 -- Table: batch_table
@@ -40,7 +42,8 @@ CREATE TABLE IF NOT EXISTS inventory_table
 
 CREATE TABLE IF NOT EXISTS batch_table
 (
-
+  batch_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  date_time TIMESTAMP
 );
 
 -- Table: sales_table
@@ -49,5 +52,6 @@ CREATE TABLE IF NOT EXISTS batch_table
 
 CREATE TABLE IF NOT EXISTS sales_table
 (
-
+  sales_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  date_time TIMESTAMP
 );
