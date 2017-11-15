@@ -31,12 +31,12 @@ router.get('/', (req, res) => {
 })
 
 // define the user authentication route
-router.get('/auth/login', (req, res) => {
+router.post('/auth/login', (req, res) => {
   res.send('User authentication')
 })
 
 // define the user registration route
-router.get('/register', (req, res) => {
+router.post('/register', (req, res) => {
   res.send('User registration')
 })
 
