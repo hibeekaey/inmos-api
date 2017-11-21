@@ -31,20 +31,20 @@ router.get('/', (req, res) => {
 })
 
 // define the add stock item route
-router.put('/new', (req, res) => {
+.put('/new', (req, res) => {
   res.send('Add stock item route')
 })
 
 // define the stock item route
-router.get('/:id', (req, res) => {
+.get('/:id', (req, res) => {
   res.send('Stock item route')
 })
 
-router.put('/:id', (req, res) => { // define the edit stock item route
+.put('/:id', (req, res) => { // define the edit stock item route
   res.send('Edit stock item route')
 })
 
-router.delete('/:id', (req, res) => { // define the remove stock item route
+.delete('/:id', (req, res) => { // define the remove stock item route
   res.send('Remove stock item route')
 })
 

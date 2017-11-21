@@ -31,20 +31,20 @@ router.get('/', (req, res) => {
 })
 
 // define the add vendor route
-router.put('/new', (req, res) => {
+.put('/new', (req, res) => {
   res.send('Add vendor route')
 })
 
 // define the vendor route
-router.get('/:id', (req, res) => {
+.get('/:id', (req, res) => {
   res.send('Vendor route')
 })
 
-router.put('/:id', (req, res) => { // define the edit vendor route
+.put('/:id', (req, res) => { // define the edit vendor route
   res.send('Edit vendor route')
 })
 
-router.delete('/:id', (req, res) => { // define the remove vendor route
+.delete('/:id', (req, res) => { // define the remove vendor route
   res.send('Remove vendor route')
 })
 

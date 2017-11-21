@@ -31,12 +31,12 @@ router.get('/', (req, res) => {
 })
 
 // define general analytics route
-router.get('/general', (req, res) => {
+.get('/general', (req, res) => {
   res.send('General analytics route')
 })
 
 // define stock analytics route
-router.get('/stock', (req, res) => {
+.get('/stock', (req, res) => {
   res.send('Stock analytics route')
 })
 
