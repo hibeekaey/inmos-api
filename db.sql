@@ -46,8 +46,8 @@ CREATE TABLE IF NOT EXISTS inventory (
   stock_id UUID NOT NULL REFERENCES stock ON DELETE CASCADE,
   store_id UUID NOT NULL REFERENCES store ON DELETE CASCADE,
   quantity INT DEFAULT 0 CHECK (quantity > 0),
-  cost_price MONEY DEFAULT 0.00 CHECK (cost_price > 0.00),
-  selling_price MONEY DEFAULT 0.00 CHECK (selling_price > 0.00),
+  cost_price NUMBER(15,2) DEFAULT 0.00 CHECK (cost_price > 0.00),
+  selling_price NUMBER(15,2) DEFAULT 0.00 CHECK (selling_price > 0.00),
   PRIMARY KEY (stock_id, store_id)
 );
 
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS supplies (
   vendor_id UUID NOT NULL REFERENCES vendor ON DELETE RESTRICT,
   stock_id UUID NOT NULL REFERENCES stock ON DELETE CASCADE,
   quantity INT DEFAULT 0 CHECK (quantity > 0),
-  cost_price MONEY DEFAULT 0.00 CHECK (cost_price > 0.00),
+  cost_price NUMBER(15,2) DEFAULT 0.00 CHECK (cost_price > 0.00),
   date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
  
@@ -72,6 +72,6 @@ CREATE TABLE IF NOT EXISTS sales (
   store_id UUID NOT NULL REFERENCES store ON DELETE CASCADE,
   stock_id UUID NOT NULL REFERENCES stock ON DELETE CASCADE,
   quantity INT DEFAULT 0 CHECK (quantity > 0),
-  selling_price MONEY DEFAULT 0.00 CHECK (selling_price > 0.00),
+  selling_price NUMBER(15,2) DEFAULT 0.00 CHECK (selling_price > 0.00),
   date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
