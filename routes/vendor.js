@@ -14,7 +14,7 @@ const express = require('express')
 const router = express.Router()
 
 // user authentication lib
-const auth = require('../lib/auth')
+const authenticate = require('../lib/auth')
 
 // access db lib
 const db = require('../lib/db')
@@ -22,30 +22,37 @@ const db = require('../lib/db')
 // middleware that is specific to this router
 router.use((req, res, next) => {
   console.log('Accessing vendor endpoint')
+  
   next()
 })
 
+// authenticate user
+router.use(authenticate)
+
 // define the vendor list route
-router.get('/', (req, res) => {
-  res.send('Vendor list route')
+router.get('/all', (req, res) => {
+  res.send('All vendors route')
 })
+  .put('/new', (req, res) => {
+  // define the add vendor route
+  
+    res.send('Add vendor route')
+  })
+  .route('/:id')
+  .get((req, res) => {
+  // define the vendor route
 
-// define the add vendor route
-.put('/new', (req, res) => {
-  res.send('Add vendor route')
-})
-
-// define the vendor route
-.get('/:id', (req, res) => {
-  res.send('Vendor route')
-})
-
-.put('/:id', (req, res) => { // define the edit vendor route
-  res.send('Edit vendor route')
-})
-
-.delete('/:id', (req, res) => { // define the remove vendor route
-  res.send('Remove vendor route')
-})
+    res.send('Vendor route')
+  })
+  .put((req, res) => {
+  // define the edit vendor route
+  
+    res.send('Edit vendor route')
+  })
+  .delete((req, res) => {
+  // define the remove vendor route
+  
+    res.send('Remove vendor route')
+  })
 
 module.exports = router
