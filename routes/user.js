@@ -46,7 +46,10 @@ router.get('/', (req, res) => {
         return db.error(res, err, 'db connection failed')
       }
 
-      client.query('INSERT INTO store (store_name, password, contact) VALUES ($1, $2, $3)', [req.body.store_name, req.body.password, req.body.contact], (err, result) => {
+      // hash password
+      let password = hash(req.body.password, process.env.SALT, 100000, 32, 'sha512').toString('hex')
+
+      client.query('INSERT INTO store (store_name, password, contact) VALUES ($1, $2, $3)', [req.body.store_name, password, req.body.contact], (err, result) => {
         done()
 
         if (err) {
