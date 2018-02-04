@@ -11,10 +11,23 @@
  */
 
 const express = require('express')
+const bodyParser = require('body-parser')
+const Cookies = require('cookies')
+const Keygrip = require('keygrip')
+
+// initialize app
 const app = express()
+
+app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 // app session
 const session = require('./lib/session')(app)
+
+// cookies support as a connect middleware layer
+let keys = Keygrip([process.env.COOKIE_KEY1, process.env.COOKIE_KEY2])
+
+app.use(Cookies.express(keys))
 
 // require routes
 const routes = require('./routes')
