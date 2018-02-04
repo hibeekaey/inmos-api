@@ -36,7 +36,27 @@ router.get('/all', (req, res) => {
   .put('/new', (req, res) => {
   // define the add stock route
   
-    res.send('Add stock route')
+    db.connect((err, client, done) => { // connect to db
+      if (err) {
+        return db.error(res, err, 'db connection failed')
+      }
+
+      client.query('INSERT INTO stock (stock_name, category) VALUES ($1, $2) RETURNING stock_id', [req.body.stock_name, req.body.category], (err, result) => {
+        if (err) {
+          return db.error(res, err, 'stock upload failed')
+        }
+        
+        client.query('INSERT INTO inventory (stock_id, store_id, cost_price) VALUES ($1, $2, $3)', [result.rows[0].stock_id, req.cookies.get('inmos_user', { signed: true }), 1.00], (err) => {
+          done()
+
+          if (err) {
+            return db.error(res, err, 'inventory update failed')
+          }
+
+          res.status(200).json({'status': 'success', 'message': 'stocked upload completed'})
+        })
+      })
+    })
   })
   .route('/:id')
   .get((req, res) => {

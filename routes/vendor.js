@@ -31,12 +31,32 @@ router.use(authenticate)
 
 // define the vendor list route
 router.get('/all', (req, res) => {
-  res.send('All vendors route')
+  db.connect((err, client, done) => { // connect to db
+    if (err) {
+      return db.error(res, err, 'db connection failed')
+    }
+
+    client.query('SELECT vendor_id FROM vendor WHERE')
+  })
 })
   .put('/new', (req, res) => {
   // define the add vendor route
-  
-    res.send('Add vendor route')
+    
+    db.connect((err, client, done) => { // connect to db
+      if (err) {
+        return db.error(res, err, 'db connection failed')
+      }
+
+      client.query('INSERT INTO vendor (vendor_name, contact) VALUES ($1, $2)', [req.body.vendor_name, req.body.contact], (err) => {
+        done()
+
+        if (err) {
+          return db.error(res, err, 'vendor upload failed')
+        }
+
+        res.status(200).json({'status': 'success', 'message': 'vendor upload completed'})
+      })
+    })
   })
   .route('/:id')
   .get((req, res) => {
