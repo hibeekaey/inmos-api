@@ -36,10 +36,18 @@ router.get('/all', (req, res) => {
       return db.error(res, err, 'db connection failed')
     }
 
-    client.query('SELECT vendor_id FROM vendor WHERE')
+    client.query('SELECT DISTINCT vendor_id, vendor_name FROM supplies NATURAL INNER JOIN vendor WHERE store_id = $1', [req.cookies.get('inmos_user', { signed: true })], (err, result) =>  {
+      done()
+
+      if (err) {
+        return db.error(res, err, 'vendor lookup failed')
+      }
+
+      res.status(200).json({'status': 'success', 'message': 'vendor lookup completed', 'data': result.rows})
+    })
   })
 })
-  .put('/new', (req, res) => {
+  .post('/new', (req, res) => {
   // define the add vendor route
     
     db.connect((err, client, done) => { // connect to db
@@ -54,7 +62,7 @@ router.get('/all', (req, res) => {
           return db.error(res, err, 'vendor upload failed')
         }
 
-        res.status(200).json({'status': 'success', 'message': 'vendor upload completed'})
+        res.status(201).json({'status': 'success', 'message': 'vendor upload completed'})
       })
     })
   })
