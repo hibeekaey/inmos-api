@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "API for the Online Inventory Monitoring System",
   "engines": {
-    "node": "8.9.1"
+    "node": "8.9.4"
   },
   "main": "server.js",
   "directories": {
