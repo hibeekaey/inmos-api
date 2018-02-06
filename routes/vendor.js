@@ -70,7 +70,21 @@ router.get('/all', (req, res) => {
   .get((req, res) => {
   // define the vendor route
 
-    res.send('Vendor route')
+    db.connect((err, client, done) => { // connect to db
+      if (err) {
+        return db.error(res, err, 'db connection failed')
+      }
+
+      client.query('SELECT vendor_name, contact FROM vendor WHERE vendor_id = $1', [req.params.id], (err, result) =>  {
+        done()
+
+        if (err) {
+          return db.error(res, err, 'vendor lookup failed')
+        }
+
+        res.status(200).json({'status': 'success', 'message': 'vendor lookup completed', 'data': result.rows})
+      })
+    })
   })
   .put((req, res) => {
   // define the edit vendor route

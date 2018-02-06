@@ -134,7 +134,21 @@ router.get('/all', (req, res) => {
   .get((req, res) => {
   // define the stock route
 
-    res.send('Stock route')
+    db.connect((err, client, done) => { // connect to db
+      if (err) {
+        return db.error(res, err, 'db connection failed')
+      }
+
+      client.query('SELECT stock_name, category, quantity, cost_price, selling_price FROM inventory NATURAL INNER JOIN stock WHERE store_id = $1 AND stock_id = $2', [req.cookies.get('inmos_user', { signed: true }), req.params.id], (err, result) => {
+        done()
+
+        if (err) {
+          return db.error(res, err, 'stock lookup failed')
+        }
+
+        res.status(200).json({'status': 'success', 'message': 'stock lookup completed', 'data': result.rows})
+      })
+    })
   })
   .put((req, res) => {
   // define the edit stock route
