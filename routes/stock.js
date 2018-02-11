@@ -69,7 +69,7 @@ router.get('/all', (req, res) => {
           
           let data = {'stock_id': result.rows[0].stock_id, 'stock_name': result.rows[0].stock_name, 'category': result.rows[0].category}
 
-          res.status(201).json({'status': 'success', 'message': 'stocked upload completed', 'data': data})
+          res.status(201).json({'status': 'success', 'message': 'stock upload completed', 'data': data})
         })
       })
     })
