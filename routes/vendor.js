@@ -47,6 +47,25 @@ router.get('/all', (req, res) => {
     })
   })
 })
+  .get('/list', (req, res) => {
+    // define all vendor list route
+    
+    db.connect((err, client, done) => { // connect to db
+      if (err) {
+        return db.error(res, err, 'db connection failed')
+      }
+  
+      client.query('SELECT vendor_id, vendor_name, contact FROM vendor', (err, result) =>  {
+        done()
+  
+        if (err) {
+          return db.error(res, err, 'vendor list lookup failed')
+        }
+  
+        res.status(200).json({'status': 'success', 'message': 'vendor list lookup completed', 'data': result.rows})
+      })
+    })
+  })
   .post('/new', (req, res) => {
   // define the add vendor route
     
