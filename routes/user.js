@@ -62,7 +62,7 @@ router.get('/', (req, res) => {
         // send store_id to user's mail
         mail(result.rows[0].contact.email[0], 'Store Registration Completed', result.rows[0].store_id)
 
-        res.status(200).json({'status': 'success', 'message': 'store registration completed'})
+        res.status(201).json({'status': 'success', 'message': 'store registration completed'})
       })
     })
   })

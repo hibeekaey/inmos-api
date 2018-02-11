@@ -31,18 +31,60 @@ router.use(authenticate)
 
 // define the vendor list route
 router.get('/all', (req, res) => {
-  res.send('All vendors route')
+  db.connect((err, client, done) => { // connect to db
+    if (err) {
+      return db.error(res, err, 'db connection failed')
+    }
+
+    client.query('SELECT DISTINCT vendor_id, vendor_name FROM supplies NATURAL INNER JOIN vendor WHERE store_id = $1', [req.cookies.get('inmos_user', { signed: true })], (err, result) =>  {
+      done()
+
+      if (err) {
+        return db.error(res, err, 'vendor lookup failed')
+      }
+
+      res.status(200).json({'status': 'success', 'message': 'vendor lookup completed', 'data': result.rows})
+    })
+  })
 })
-  .put('/new', (req, res) => {
+  .post('/new', (req, res) => {
   // define the add vendor route
-  
-    res.send('Add vendor route')
+    
+    db.connect((err, client, done) => { // connect to db
+      if (err) {
+        return db.error(res, err, 'db connection failed')
+      }
+
+      client.query('INSERT INTO vendor (vendor_name, contact) VALUES ($1, $2)', [req.body.vendor_name, req.body.contact], (err) => {
+        done()
+
+        if (err) {
+          return db.error(res, err, 'vendor upload failed')
+        }
+
+        res.status(201).json({'status': 'success', 'message': 'vendor upload completed'})
+      })
+    })
   })
   .route('/:id')
   .get((req, res) => {
   // define the vendor route
 
-    res.send('Vendor route')
+    db.connect((err, client, done) => { // connect to db
+      if (err) {
+        return db.error(res, err, 'db connection failed')
+      }
+
+      client.query('SELECT vendor_name, contact FROM vendor WHERE vendor_id = $1', [req.params.id], (err, result) =>  {
+        done()
+
+        if (err) {
+          return db.error(res, err, 'vendor lookup failed')
+        }
+
+        res.status(200).json({'status': 'success', 'message': 'vendor lookup completed', 'data': result.rows})
+      })
+    })
   })
   .put((req, res) => {
   // define the edit vendor route
