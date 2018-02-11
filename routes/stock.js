@@ -36,7 +36,7 @@ router.get('/all', (req, res) => {
       return db.error(res, err, 'db connection failed')
     }
 
-    client.query('SELECT stock_id, stock_name, quantity, cost_price, selling_price FROM inventory NATURAL INNER JOIN stock WHERE store_id = $1', [req.cookies.get('inmos_user', { signed: true })], (err, result) => {
+    client.query('SELECT stock_id, stock_name, category, quantity, cost_price, selling_price FROM inventory NATURAL INNER JOIN stock WHERE store_id = $1', [req.cookies.get('inmos_user', { signed: true })], (err, result) => {
       done()
 
       if (err) {
@@ -55,7 +55,7 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection failed')
       }
 
-      client.query('INSERT INTO stock (stock_name, category) VALUES ($1, $2) RETURNING stock_id', [req.body.stock_name, req.body.category], (err, result) => {
+      client.query('INSERT INTO stock (stock_name, category) VALUES ($1, $2) RETURNING stock_id, stock_name, category', [req.body.stock_name, req.body.category], (err, result) => {
         if (err) {
           return db.error(res, err, 'stock upload failed')
         }
@@ -66,8 +66,10 @@ router.get('/all', (req, res) => {
           if (err) {
             return db.error(res, err, 'inventory update failed')
           }
+          
+          let data = {'stock_id': result.rows[0].stock_id, 'stock_name': result.rows[0].stock_name, 'category': result.rows[0].category}
 
-          res.status(201).json({'status': 'success', 'message': 'stocked upload completed'})
+          res.status(201).json({'status': 'success', 'message': 'stocked upload completed', 'data': data})
         })
       })
     })
@@ -86,14 +88,14 @@ router.get('/all', (req, res) => {
         }
 
         if (result.rows.length > 0) {
-          client.query('INSERT INTO supplies (store_id, vendor_id, stock_id, quantity, cost_price) VALUES ($1, $2, $3, $4, $5)', [result.rows[0].store_id, req.body.vendor_id, result.rows[0].stock_id, result.rows[0].quantity, result.rows[0].cost_price], (err) => {
+          client.query('INSERT INTO supplies (store_id, vendor_id, stock_id, quantity, cost_price) VALUES ($1, $2, $3, $4, $5) RETURNING vendor_id, stock_id, quantity, cost_price', [result.rows[0].store_id, req.body.vendor_id, result.rows[0].stock_id, result.rows[0].quantity, result.rows[0].cost_price], (err, result) => {
             done()
 
             if (err) {
               return db.error(res, err, 'supplies update failed')
             }
 
-            res.status(201).json({'status': 'success', 'message': 'stock supply completed'})
+            res.status(201).json({'status': 'success', 'message': 'stock supply completed', 'data': result.rows[0]})
           })
         } else {
           res.status(401).json({'status': 'error', 'message': 'stock supply failed, unauthorized'})
@@ -115,14 +117,14 @@ router.get('/all', (req, res) => {
         }
 
         if (result.rows.length > 0) {
-          client.query('INSERT INTO sales (store_id, stock_id, quantity, selling_price) VALUES ($1, $2, $3, $4)', [result.rows[0].store_id, result.rows[0].stock_id, result.rows[0].quantity, result.rows[0].selling_price], (err) => {
+          client.query('INSERT INTO sales (store_id, stock_id, quantity, selling_price) VALUES ($1, $2, $3, $4) RETURNING stock_id, quantity, selling_price', [result.rows[0].store_id, result.rows[0].stock_id, result.rows[0].quantity, result.rows[0].selling_price], (err, result) => {
             done()
 
             if (err) {
               return db.error(res, err, 'supplies update failed')
             }
 
-            res.status(201).json({'status': 'success', 'message': 'stock sale completed'})
+            res.status(201).json({'status': 'success', 'message': 'stock sale completed', 'data': result.rows[0]})
           })
         } else {
           res.status(401).json({'status': 'error', 'message': 'stock sale failed, unauthorized'})
@@ -139,14 +141,14 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection failed')
       }
 
-      client.query('SELECT stock_name, category, quantity, cost_price, selling_price FROM inventory NATURAL INNER JOIN stock WHERE store_id = $1 AND stock_id = $2', [req.cookies.get('inmos_user', { signed: true }), req.params.id], (err, result) => {
+      client.query('SELECT stock_id, stock_name, category, quantity, cost_price, selling_price FROM inventory NATURAL INNER JOIN stock WHERE store_id = $1 AND stock_id = $2', [req.cookies.get('inmos_user', { signed: true }), req.params.id], (err, result) => {
         done()
 
         if (err) {
           return db.error(res, err, 'stock lookup failed')
         }
 
-        res.status(200).json({'status': 'success', 'message': 'stock lookup completed', 'data': result.rows})
+        res.status(200).json({'status': 'success', 'message': 'stock lookup completed', 'data': result.rows[0]})
       })
     })
   })
@@ -158,21 +160,35 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection failed')
       }
 
-      client.query('UPDATE stock SET stock_name = $1, category = $2 WHERE stock_id = $3 RETURNING stock_name, category', [req.body.stock_name, req.body.category, req.params.id], (err, result) => {
+      client.query('UPDATE stock SET stock_name = $1, category = $2 WHERE stock_id = $3 RETURNING *', [req.body.stock_name, req.body.category, req.params.id], (err, result) => {
         done()
 
         if (err) {
           return db.error(res, err, 'stock update failed')
         }
 
-        res.status(201).json({'status': 'success', 'message': 'stock update completed', 'data': result.rows})
+        res.status(201).json({'status': 'success', 'message': 'stock update completed', 'data': result.rows[0]})
       })
     })
   })
   .delete((req, res) => {
   // define the remove stock route
   
-    res.send('Remove stock route')
+    db.connect((err, client, done) => { // connect to db
+      if (err) {
+        return db.error(res, err, 'db connection failed')
+      }
+
+      client.query('DELETE FROM stock WHERE stock_id = $1 RETURNING *', [req.params.id], (err, result) => {
+        done()
+
+        if (err) {
+          return db.error(res, err, 'stock removal failed')
+        }
+
+        res.status(201).json({'status': 'success', 'message': 'stock removal completed', 'data': result.rows[0]})
+      })
+    })
   })
 
 module.exports = router
