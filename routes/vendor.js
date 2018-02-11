@@ -55,14 +55,14 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection failed')
       }
 
-      client.query('INSERT INTO vendor (vendor_name, contact) VALUES ($1, $2)', [req.body.vendor_name, req.body.contact], (err) => {
+      client.query('INSERT INTO vendor (vendor_name, contact) VALUES ($1, $2) RETURNING vendor_id, vendor_name, contact', [req.body.vendor_name, req.body.contact], (err, result) => {
         done()
 
         if (err) {
           return db.error(res, err, 'vendor upload failed')
         }
 
-        res.status(201).json({'status': 'success', 'message': 'vendor upload completed'})
+        res.status(201).json({'status': 'success', 'message': 'vendor upload completed', 'data': result.rows[0]})
       })
     })
   })
@@ -82,7 +82,7 @@ router.get('/all', (req, res) => {
           return db.error(res, err, 'vendor lookup failed')
         }
 
-        res.status(200).json({'status': 'success', 'message': 'vendor lookup completed', 'data': result.rows})
+        res.status(200).json({'status': 'success', 'message': 'vendor lookup completed', 'data': result.rows[0]})
       })
     })
   })
@@ -94,14 +94,14 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection failed')
       }
 
-      client.query('UPDATE vendor SET vendor_name = $1, contact = $2 WHERE vendor_id = $3 RETURNING vendor_name, contact', [req.body.vendor_name, req.body.contact, req.params.id], (err, result) => {
+      client.query('UPDATE vendor SET vendor_name = $1, contact = $2 WHERE vendor_id = $3 RETURNING vendor_id, vendor_name, contact', [req.body.vendor_name, req.body.contact, req.params.id], (err, result) => {
         done()
-
+        
         if (err) {
           return db.error(res, err, 'vendor update failed')
         }
 
-        res.status(201).json({'status': 'success', 'message': 'vendor update completed', 'data': result.rows})
+        res.status(201).json({'status': 'success', 'message': 'vendor update completed', 'data': result.rows[0]})
       })
     })
   })
