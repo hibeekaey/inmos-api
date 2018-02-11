@@ -33,7 +33,7 @@ router.use(authenticate)
 router.get('/all', (req, res) => {
   res.send('All analytics route')
 })
-  .get('/general', (req, res) => {
+  .get('/sales', (req, res) => {
   // define general analytics route
 
     res.send('General analytics route')
