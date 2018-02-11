@@ -153,7 +153,21 @@ router.get('/all', (req, res) => {
   .put((req, res) => {
   // define the edit stock route
 
-    res.send('Edit stock route')
+    db.connect((err, client, done) => { // connect to db
+      if (err) {
+        return db.error(res, err, 'db connection failed')
+      }
+
+      client.query('UPDATE stock SET stock_name = $1, category = $2 WHERE stock_id = $3 RETURNING stock_name, category', [req.body.stock_name, req.body.category, req.params.id], (err, result) => {
+        done()
+
+        if (err) {
+          return db.error(res, err, 'stock update failed')
+        }
+
+        res.status(201).json({'status': 'success', 'message': 'stock update completed', 'data': result.rows})
+      })
+    })
   })
   .delete((req, res) => {
   // define the remove stock route

@@ -89,7 +89,21 @@ router.get('/all', (req, res) => {
   .put((req, res) => {
   // define the edit vendor route
   
-    res.send('Edit vendor route')
+    db.connect((err, client, done) => { // connect to db
+      if (err) {
+        return db.error(res, err, 'db connection failed')
+      }
+
+      client.query('UPDATE vendor SET vendor_name = $1, contact = $2 WHERE vendor_id = $3 RETURNING vendor_name, contact', [req.body.vendor_name, req.body.contact, req.params.id], (err, result) => {
+        done()
+
+        if (err) {
+          return db.error(res, err, 'vendor update failed')
+        }
+
+        res.status(201).json({'status': 'success', 'message': 'vendor update completed', 'data': result.rows})
+      })
+    })
   })
   .delete((req, res) => {
   // define the remove vendor route
