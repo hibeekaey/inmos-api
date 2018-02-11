@@ -141,7 +141,7 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection failed')
       }
 
-      client.query('SELECT stock_name, category, quantity, cost_price, selling_price FROM inventory NATURAL INNER JOIN stock WHERE store_id = $1 AND stock_id = $2', [req.cookies.get('inmos_user', { signed: true }), req.params.id], (err, result) => {
+      client.query('SELECT stock_id, stock_name, category, quantity, cost_price, selling_price FROM inventory NATURAL INNER JOIN stock WHERE store_id = $1 AND stock_id = $2', [req.cookies.get('inmos_user', { signed: true }), req.params.id], (err, result) => {
         done()
 
         if (err) {
@@ -160,7 +160,7 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection failed')
       }
 
-      client.query('UPDATE stock SET stock_name = $1, category = $2 WHERE stock_id = $3 RETURNING stock_id, stock_name, category', [req.body.stock_name, req.body.category, req.params.id], (err, result) => {
+      client.query('UPDATE stock SET stock_name = $1, category = $2 WHERE stock_id = $3 RETURNING *', [req.body.stock_name, req.body.category, req.params.id], (err, result) => {
         done()
 
         if (err) {
@@ -174,7 +174,21 @@ router.get('/all', (req, res) => {
   .delete((req, res) => {
   // define the remove stock route
   
-    res.send('Remove stock route')
+    db.connect((err, client, done) => { // connect to db
+      if (err) {
+        return db.error(res, err, 'db connection failed')
+      }
+
+      client.query('DELETE FROM stock WHERE stock_id = $1 RETURNING *', [req.params.id], (err, result) => {
+        done()
+
+        if (err) {
+          return db.error(res, err, 'stock removal failed')
+        }
+
+        res.status(201).json({'status': 'success', 'message': 'stock removal completed', 'data': result.rows[0]})
+      })
+    })
   })
 
 module.exports = router
