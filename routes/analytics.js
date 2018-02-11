@@ -36,14 +36,22 @@ router.get('/all', (req, res) => {
       return db.error(res, err, 'db connection failed')
     }
     
-    client.query('SELECT SUM(quantity) AS total_quantity, SUM(quantity * cost_price) AS total_value FROM inventory WHERE store_id = $1', [req.cookies.get('inmos_user', { signed: true })], (err, result) => {
-      done()
-
+    client.query('SELECT SUM(quantity) AS total_quantity, SUM(quantity * cost_price) AS total_value FROM inventory WHERE store_id = $1', [req.cookies.get('inmos_user', { signed: true })], (err, result1) => {
       if (err) {
         return db.error(res, err, 'all analytics lookup failed')
       }
-      
-      res.status(201).json({'status': 'success', 'message': 'all analytics lookup completed', 'data': result.rows[0]})
+
+      client.query('SELECT SUBSTRING(date_time::text FROM 1 FOR 10) AS date, SUM(quantity * selling_price) AS total_sales FROM sales WHERE store_id = $1 GROUP BY date ORDER BY date DESC', [req.cookies.get('inmos_user', { signed: true })], (err, result2) => {
+        done()
+        
+        if (err) {
+          return db.error(res, err, 'sales analytics lookup failed')
+        }
+        
+        let data = {'stock': result1.rows[0], 'sales': result2.rows}
+
+        res.status(200).json({'status': 'success', 'message': 'all analytics lookup completed', 'data': data})
+      })
     })
   })
 })
@@ -55,14 +63,14 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection failed')
       }
       
-      client.query('SELECT date_time, SUM(quantity * selling_price) AS total_sales FROM sales WHERE store_id = $1 GROUP BY EXTRACT(DAY FROM date_time)', [req.cookies.get('inmos_user', { signed: true })], (err, result) => {
+      client.query('SELECT SUBSTRING(date_time::text FROM 1 FOR 10) AS date, SUM(quantity * selling_price) AS total_sales FROM sales WHERE store_id = $1 GROUP BY date ORDER BY date DESC', [req.cookies.get('inmos_user', { signed: true })], (err, result) => {
         done()
-        console.log(err)
+        
         if (err) {
           return db.error(res, err, 'sales analytics lookup failed')
         }
         
-        res.status(201).json({'status': 'success', 'message': 'sales analytics lookup completed', 'data': result.rows})
+        res.status(200).json({'status': 'success', 'message': 'sales analytics lookup completed', 'data': result.rows})
       })
     })
   })
@@ -81,7 +89,7 @@ router.get('/all', (req, res) => {
           return db.error(res, err, 'stock analytics lookup failed')
         }
         
-        res.status(201).json({'status': 'success', 'message': 'stock analytics lookup completed', 'data': result.rows[0]})
+        res.status(200).json({'status': 'success', 'message': 'stock analytics lookup completed', 'data': result.rows[0]})
       })
     })
   })

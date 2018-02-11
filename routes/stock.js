@@ -127,7 +127,7 @@ router.get('/all', (req, res) => {
             res.status(201).json({'status': 'success', 'message': 'stock sale completed', 'data': result.rows[0]})
           })
         } else {
-          res.status(401).json({'status': 'error', 'message': 'stock sale failed, unauthorized'})
+          res.status(404).json({'status': 'error', 'message': 'stock sale failed, stock not available'})
         }
       })
     })
