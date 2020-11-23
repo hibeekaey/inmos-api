@@ -55,4 +55,4 @@ routes.mount(app)
 
 // listen to the app on port process.env.PORT
 // eslint-disable-next-line no-console
-app.listen(process.env.PORT, () => console.log(`Inmos API listening on port ${process.env.PORT}`))
+app.listen(process.env.PORT || 5000, () => console.log(`Inmos API listening on port ${process.env.PORT || 5000}`))
