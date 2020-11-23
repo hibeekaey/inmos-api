@@ -1,15 +1,15 @@
 -- Database: inmos
 
--- DROP DATABASE IF EXISTS inmos;
+DROP DATABASE IF EXISTS inmos;
 
--- CREATE DATABASE inmos;
+CREATE DATABASE inmos;
 
--- COMMENT ON DATABASE inmos
---  IS 'inmos database';
+COMMENT ON DATABASE inmos
+ IS 'inmos database';
 
 -- Table: store
 
--- DROP TABLE IF EXISTS store CASCADE;
+DROP TABLE IF EXISTS store CASCADE;
 
 CREATE TABLE IF NOT EXISTS store (
   store_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS store (
 
 -- Table: vendor
 
--- DROP TABLE IF EXISTS vendor CASCADE
+DROP TABLE IF EXISTS vendor CASCADE
 
 CREATE TABLE IF NOT EXISTS vendor (
   vendor_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS vendor (
 
 -- Table: stock
 
--- DROP TABLE IF EXISTS stock CASCADE
+DROP TABLE IF EXISTS stock CASCADE
 
 CREATE TABLE IF NOT EXISTS stock (
   stock_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
