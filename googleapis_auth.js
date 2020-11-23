@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
 /*!
  * inmos-api
- * Copyright (c) 2017 Ibukun O. Dairo
+ * Copyright (c) 2017 Smooth
  * MIT Licensed
  */
 

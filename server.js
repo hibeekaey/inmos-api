@@ -1,6 +1,6 @@
 /*!
  * inmos-api
- * Copyright (c) 2017 Ibukun O. Dairo
+ * Copyright (c) 2017 Smooth
  * MIT Licensed
  */
 
@@ -40,7 +40,7 @@ app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 // app session
-const session = require('./lib/session')(app)
+require('./lib/session')(app)
 
 // cookies support as a connect middleware layer
 let keys = Keygrip([process.env.COOKIE_KEY1, process.env.COOKIE_KEY2])
@@ -54,4 +54,5 @@ const routes = require('./routes')
 routes.mount(app)
 
 // listen to the app on port process.env.PORT
+// eslint-disable-next-line no-console
 app.listen(process.env.PORT, () => console.log(`Inmos API listening on port ${process.env.PORT}`))
