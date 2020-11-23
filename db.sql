@@ -4,8 +4,7 @@ DROP DATABASE IF EXISTS inmos;
 
 CREATE DATABASE inmos;
 
-COMMENT ON DATABASE inmos
- IS 'inmos database';
+COMMENT ON DATABASE inmos IS 'inmos database';
 
 -- Table: store
 
