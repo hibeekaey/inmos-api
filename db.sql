@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS store (
 
 -- Table: vendor
 
-DROP TABLE IF EXISTS vendor CASCADE
+DROP TABLE IF EXISTS vendor CASCADE;
 
 CREATE TABLE IF NOT EXISTS vendor (
   vendor_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS vendor (
 
 -- Table: stock
 
-DROP TABLE IF EXISTS stock CASCADE
+DROP TABLE IF EXISTS stock CASCADE;
 
 CREATE TABLE IF NOT EXISTS stock (
   stock_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
