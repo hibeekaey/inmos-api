@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /*!
  * inmos-api
- * Copyright (c) 2017 Smooth
+ * Copyright (c) 2020 Sulihat
  * MIT Licensed
  */
 
