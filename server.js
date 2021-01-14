@@ -47,7 +47,7 @@ require('./lib/session')(app)
 let keys = Keygrip([process.env.COOKIE_KEY1, process.env.COOKIE_KEY2])
 
 app.use(Cookies.express(keys))
-app.use(cookieParser(process.env.SESSION_SECRET))
+app.use(cookieParser())
 
 // require routes
 const routes = require('./routes')
