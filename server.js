@@ -20,7 +20,7 @@ const Keygrip = require('keygrip')
 const app = express()
 
 const cors = (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Origin', 'https://inmos-web.herokuapp.com')
   res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE, PUT')
   res.header('Access-Control-Max-Age', '3600')
   res.header('Access-Control-Allow-Headers', 'Content-Type, Range')
