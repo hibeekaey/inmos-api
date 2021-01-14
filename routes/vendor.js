@@ -37,7 +37,7 @@ router.get('/all', (req, res) => {
       return db.error(res, err, 'db connection failed')
     }
 
-    client.query('SELECT DISTINCT vendor_id, vendor_name, contact FROM supplies NATURAL INNER JOIN vendor WHERE store_id = $1', [req.cookies.get('inmos_user', { signed: true })], (err, result) =>  {
+    client.query('SELECT DISTINCT vendor_id, vendor_name, contact FROM supplies NATURAL INNER JOIN vendor WHERE store_id = $1', [req.cookies.inmos_user], (err, result) =>  {
       done()
 
       if (err) {

@@ -37,12 +37,12 @@ router.get('/all', (req, res) => {
       return db.error(res, err, 'db connection failed')
     }
     
-    client.query('SELECT SUM(quantity) AS total_quantity, SUM(quantity * cost_price) AS total_value FROM inventory WHERE store_id = $1', [req.cookies.get('inmos_user', { signed: true })], (err, result1) => {
+    client.query('SELECT SUM(quantity) AS total_quantity, SUM(quantity * cost_price) AS total_value FROM inventory WHERE store_id = $1', [req.cookies.inmos_user], (err, result1) => {
       if (err) {
         return db.error(res, err, 'all analytics lookup failed')
       }
 
-      client.query('SELECT SUBSTRING(date_time::text FROM 1 FOR 10) AS date, SUM(quantity * selling_price) AS total_sales FROM sales WHERE store_id = $1 GROUP BY date ORDER BY date DESC', [req.cookies.get('inmos_user', { signed: true })], (err, result2) => {
+      client.query('SELECT SUBSTRING(date_time::text FROM 1 FOR 10) AS date, SUM(quantity * selling_price) AS total_sales FROM sales WHERE store_id = $1 GROUP BY date ORDER BY date DESC', [req.cookies.inmos_user], (err, result2) => {
         done()
         
         if (err) {
@@ -64,7 +64,7 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection failed')
       }
       
-      client.query('SELECT SUBSTRING(date_time::text FROM 1 FOR 10) AS date, SUM(quantity * selling_price) AS total_sales FROM sales WHERE store_id = $1 GROUP BY date ORDER BY date DESC', [req.cookies.get('inmos_user', { signed: true })], (err, result) => {
+      client.query('SELECT SUBSTRING(date_time::text FROM 1 FOR 10) AS date, SUM(quantity * selling_price) AS total_sales FROM sales WHERE store_id = $1 GROUP BY date ORDER BY date DESC', [req.cookies.inmos_user], (err, result) => {
         done()
         
         if (err) {
@@ -83,7 +83,7 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection failed')
       }
       
-      client.query('SELECT SUM(quantity) AS total_quantity, SUM(quantity * cost_price) AS total_value FROM inventory WHERE store_id = $1', [req.cookies.get('inmos_user', { signed: true })], (err, result) => {
+      client.query('SELECT SUM(quantity) AS total_quantity, SUM(quantity * cost_price) AS total_value FROM inventory WHERE store_id = $1', [req.cookies.inmos_user], (err, result) => {
         done()
 
         if (err) {

@@ -37,7 +37,7 @@ router.get('/all', (req, res) => {
       return db.error(res, err, 'db connection failed')
     }
 
-    client.query('SELECT stock_id, stock_name, category, quantity, cost_price, selling_price FROM inventory NATURAL INNER JOIN stock WHERE store_id = $1', [req.cookies.get('inmos_user', { signed: true })], (err, result) => {
+    client.query('SELECT stock_id, stock_name, category, quantity, cost_price, selling_price FROM inventory NATURAL INNER JOIN stock WHERE store_id = $1', [req.cookies.inmos_user], (err, result) => {
       done()
 
       if (err) {
@@ -61,7 +61,7 @@ router.get('/all', (req, res) => {
           return db.error(res, err, 'stock upload failed')
         }
         
-        client.query('INSERT INTO inventory (stock_id, store_id) VALUES ($1, $2)', [result.rows[0].stock_id, req.cookies.get('inmos_user', { signed: true })], (err) => {
+        client.query('INSERT INTO inventory (stock_id, store_id) VALUES ($1, $2)', [result.rows[0].stock_id, req.cookies.inmos_user], (err) => {
           done()
 
           if (err) {
@@ -83,7 +83,7 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection error')
       }
 
-      client.query('UPDATE inventory SET quantity = quantity + $1, cost_price = $2 WHERE stock_id = $3 AND store_id = $4 RETURNING stock_id, store_id, quantity, cost_price', [req.body.quantity, req.body.cost_price, req.body.stock_id, req.cookies.get('inmos_user', { signed: true })], (err, result) => {
+      client.query('UPDATE inventory SET quantity = quantity + $1, cost_price = $2 WHERE stock_id = $3 AND store_id = $4 RETURNING stock_id, store_id, quantity, cost_price', [req.body.quantity, req.body.cost_price, req.body.stock_id, req.cookies.inmos_user], (err, result) => {
         if (err) {
           return db.error(res, err, 'inventory update failed')
         }
@@ -112,7 +112,7 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection error')
       }
 
-      client.query('UPDATE inventory SET quantity = quantity - $1, selling_price = $2 WHERE stock_id = $3 AND store_id = $4 RETURNING stock_id, store_id, quantity, selling_price', [req.body.quantity, req.body.selling_price, req.body.stock_id, req.cookies.get('inmos_user', { signed: true })], (err, result) => {
+      client.query('UPDATE inventory SET quantity = quantity - $1, selling_price = $2 WHERE stock_id = $3 AND store_id = $4 RETURNING stock_id, store_id, quantity, selling_price', [req.body.quantity, req.body.selling_price, req.body.stock_id, req.cookies.inmos_user], (err, result) => {
         if (err) {
           return db.error(res, err, 'inventory update failed')
         }
@@ -142,7 +142,7 @@ router.get('/all', (req, res) => {
         return db.error(res, err, 'db connection failed')
       }
 
-      client.query('SELECT stock_id, stock_name, category, quantity, cost_price, selling_price FROM inventory NATURAL INNER JOIN stock WHERE store_id = $1 AND stock_id = $2', [req.cookies.get('inmos_user', { signed: true }), req.params.id], (err, result) => {
+      client.query('SELECT stock_id, stock_name, category, quantity, cost_price, selling_price FROM inventory NATURAL INNER JOIN stock WHERE store_id = $1 AND stock_id = $2', [req.cookies.inmos_user, req.params.id], (err, result) => {
         done()
 
         if (err) {
