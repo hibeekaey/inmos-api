@@ -13,6 +13,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const Cookies = require('cookies')
+const cookieParser = require('cookie-parser')
 const Keygrip = require('keygrip')
 // const cors = require('cors')
 
@@ -46,6 +47,7 @@ require('./lib/session')(app)
 let keys = Keygrip([process.env.COOKIE_KEY1, process.env.COOKIE_KEY2])
 
 app.use(Cookies.express(keys))
+app.use(cookieParser())
 
 // require routes
 const routes = require('./routes')
