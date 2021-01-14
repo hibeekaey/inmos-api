@@ -12,9 +12,9 @@
 
 const express = require('express')
 const bodyParser = require('body-parser')
-const Cookies = require('cookies')
+// const Cookies = require('cookies')
 const cookieParser = require('cookie-parser')
-const Keygrip = require('keygrip')
+// const Keygrip = require('keygrip')
 // const cors = require('cors')
 
 // initialize app
@@ -41,12 +41,12 @@ app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 // app session
-require('./lib/session')(app)
+// require('./lib/session')(app)
 
 // cookies support as a connect middleware layer
-let keys = Keygrip([process.env.COOKIE_KEY1, process.env.COOKIE_KEY2])
+// let keys = Keygrip([process.env.COOKIE_KEY1, process.env.COOKIE_KEY2])
 
-app.use(Cookies.express(keys))
+// app.use(Cookies.express(keys))
 app.use(cookieParser())
 
 // require routes
